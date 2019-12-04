@@ -1,4 +1,4 @@
-import {read} from "src/lib";
+import {read} from "@lib";
 
 export function runner(input: string): Number {
 	return input
