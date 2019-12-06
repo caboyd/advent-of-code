@@ -1,7 +1,7 @@
 import {read_input} from "src/lib";
 import {day, year} from "./index";
 
-export function rocket_equation_two(input: string): Number {
+export const rocket_equation_two = (input: string): Number => {
     return input
         .split(/\r?\n/)
         .map(n => {
@@ -13,8 +13,8 @@ export function rocket_equation_two(input: string): Number {
             }
             return fuel;
         })
-        .reduce((sum, item) => sum + item, 0);
-}
+        .reduce((sum, item) => sum + item);
+};
 
 if (require.main === module) {
     (async () => {

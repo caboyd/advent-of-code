@@ -1,12 +1,12 @@
 import {read_input} from "src/lib";
 import {day, year} from "./index";
 
-export function rocket_equation(input: string): Number {
+export const rocket_equation = (input: string): Number => {
     return input
         .split(/\r?\n/)
         .map(n => Math.floor(Number(n) / 3) - 2)
         .reduce((sum, item) => sum + item);
-}
+};
 
 if (require.main === module) {
     (async () => {
