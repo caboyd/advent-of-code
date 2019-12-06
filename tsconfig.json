@@ -9,7 +9,6 @@
     "declaration": false,
     "baseUrl": "./",
     "paths":{
-      "@lib":["src/lib"]
     },
     "outDir": "dist",
     "strict": true,
