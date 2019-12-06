@@ -1,10 +1,14 @@
 import {read_input} from "../../lib";
 import {day, year} from "./index";
 
-export const equation = (input: string): Array<number> => {
+export const equation = (input: string, noun: number | undefined = undefined, verb: number | undefined = undefined): Array<number> => {
 	let data = input.split(/,/).map(n => Number(n));
 
 	let stack_pointer = 0;
+
+	//apply bugfixes
+	data[1] = noun || data[1];
+	data[2] = verb || data[2];
 
 	while (data[stack_pointer] !== 99) {
 		let [op_code, d1, d2, result] = data.slice(stack_pointer, stack_pointer + 4);
@@ -34,6 +38,6 @@ export const equation = (input: string): Array<number> => {
 
 if (require.main === module) {
 	(async () => {
-		console.log(`Result: ${equation(await read_input(year, day))}`);
+		console.log(`Result: ${equation(await read_input(year, day), 12, 2)}`);
 	})();
 }
