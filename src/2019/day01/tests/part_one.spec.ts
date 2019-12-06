@@ -21,3 +21,4 @@ describe(`${year} - Day${day} Part One`, () => {
         })
     })
 });
+
