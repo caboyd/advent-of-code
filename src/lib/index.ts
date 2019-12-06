@@ -1,13 +1,12 @@
 import {promises} from "fs";
 
-export interface Results<T = number, K = T > {
-	one: T;
-	two: K;
+export interface Results<T = number, K = T> {
+    one: T;
+    two: K;
 }
 
+export async function read_input(year: Number, day: Number, file_name: string = 'input.txt'): Promise<string> {
+    const base_url = `src/${year}/day${day < 10 ? '0' : ''}${day}/resources/`;
 
-export async function read_input (year:Number, day:Number, file_name:string = 'input.txt'): Promise <string> {
-	const base_url = `src/${year}/day${ day < 10 ? '0':''}${day}/resources/`;
-
-	return await promises.readFile(`${base_url}${file_name}`, {encoding: 'UTF-8'}) as string;
+    return await promises.readFile(`${base_url}${file_name}`, {encoding: 'UTF-8'}) as string;
 }
