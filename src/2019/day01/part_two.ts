@@ -1,7 +1,7 @@
-import {read_input} from "src/lib";
-import {day, year} from "./index";
+import {read_input} from 'src/lib';
+import {day, year} from './index';
 
-export const rocket_equation_two = (input: string): Number => {
+export const equation_two = (input: string): number => {
     return input
         .split(/\r?\n/)
         .map(n => {
@@ -18,6 +18,6 @@ export const rocket_equation_two = (input: string): Number => {
 
 if (require.main === module) {
     (async () => {
-        console.log(`Result: ${rocket_equation_two(await read_input(year, day))}`);
+        console.log(`Result: ${equation_two(await read_input(year, day))}`);
     })();
 }

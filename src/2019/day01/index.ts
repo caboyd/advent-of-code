@@ -1,4 +1,4 @@
-import {Results} from "src/lib";
+import {Results} from 'src/lib';
 
 export const year = 2019;
 export const day = 1;
