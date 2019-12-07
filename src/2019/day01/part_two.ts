@@ -1,14 +1,16 @@
-import {read_input} from 'src/lib';
+/* eslint-disable @typescript-eslint/no-magic-numbers */
+import {benchmark, read_input} from 'src/lib';
 import {day, year} from './index';
 
 export const equation_two = (input: string): number => {
     return input
         .split(/\r?\n/)
         .map(n => {
-            let fuel = Math.floor(Number(n) / 3) - 2;
-            let remaining_mass = fuel;
-            while (remaining_mass > 6) {
+            let fuel = 0;
+            let remaining_mass = Number(n);
+            for (;;) {
                 remaining_mass = Math.floor(Number(remaining_mass) / 3) - 2;
+                if (remaining_mass < 0) break;
                 fuel += remaining_mass;
             }
             return fuel;
@@ -18,6 +20,7 @@ export const equation_two = (input: string): number => {
 
 if (require.main === module) {
     (async () => {
-        console.log(`Result: ${equation_two(await read_input(year, day))}`);
+        const input = await read_input(year, day);
+        console.log(`Result: ${benchmark(() => equation_two(input))}`);
     })();
 }

@@ -1,12 +1,16 @@
-import {read_input} from '../../lib';
+import {benchmark, read_input} from '../../lib';
 import {day, year} from './index';
 import {equation_one} from './part_one';
 
-export const equation_two = async (input: string): Promise<number> => {
-    for (let noun = 0; noun < 100; noun++) {
-        for (let verb = 0; verb < 100; verb++) {
-            if (equation_one(input, noun, verb)[0] === 19690720) {
-                return noun * 100 + verb;
+const noun_max = 100;
+const verb_max = 100;
+const gravity_assist_output = 19690720;
+
+export const equation_two = (input: string): number => {
+    for (let noun = 0; noun < noun_max; noun++) {
+        for (let verb = 0; verb < verb_max; verb++) {
+            if (equation_one(input, noun, verb)[0] === gravity_assist_output) {
+                return noun * verb_max + verb;
             }
         }
     }
@@ -15,6 +19,7 @@ export const equation_two = async (input: string): Promise<number> => {
 
 if (require.main === module) {
     (async () => {
-        console.log(`Result: ${await equation_two(await read_input(year, day))}`);
+        const input = await read_input(year, day);
+        console.log(`Result: ${benchmark(() => equation_two(input))}`);
     })();
 }

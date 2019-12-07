@@ -1,4 +1,5 @@
-import {read_input} from 'src/lib';
+/* eslint-disable @typescript-eslint/no-magic-numbers */
+import {benchmark, read_input} from 'src/lib';
 import {day, year} from './index';
 
 export const equation_one = (input: string): number => {
@@ -10,6 +11,7 @@ export const equation_one = (input: string): number => {
 
 if (require.main === module) {
     (async () => {
-        console.log(`Result: ${equation_one(await read_input(year, day))}`);
+        const input = await read_input(year, day);
+        console.log(`Result: ${benchmark(() => equation_one(input))}`);
     })();
 }

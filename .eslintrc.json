@@ -22,6 +22,15 @@
     "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/explicit-function-return-type": ["error", {
       "allowExpressions": true
-    }]
-  }
+    }],
+    "@typescript-eslint/no-magic-numbers": ["error", { "ignoreEnums": true, "ignoreNumericLiteralTypes": true, "ignoreArrayIndexes": true, "ignore": [0] }]
+  },
+  "overrides": [
+    {
+      "files": [ "*.spec.ts" ],
+      "rules": {
+        "@typescript-eslint/no-magic-numbers": "off"
+      }
+    }
+  ]
 }
