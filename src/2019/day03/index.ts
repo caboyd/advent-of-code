@@ -47,11 +47,9 @@ export const find_line_intersections = (
 ): number => {
     let shortest_distance = Number.MAX_SAFE_INTEGER;
 
-    for (let i = 0; i < horiz.length; i++) {
-        const l1 = horiz[i];
+    for (const l1 of horiz) {
         if (l1.x_min === 0) continue;
-        for (let j = 0; j < vert.length; j++) {
-            const l2 = vert[j];
+        for (const l2 of vert) {
             if (l2.x === 0) continue;
             //find intersections
             if (l1.y < l2.y_max && l1.y > l2.y_min) {
