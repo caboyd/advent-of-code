@@ -62,7 +62,7 @@ export const equation_one = (
     input: string,
     noun: number | undefined = undefined,
     verb: number | undefined = undefined,
-): Array<number> => {
+): number[] => {
     const data = input.split(/,/).map(n => Number(n));
 
     return Array.from(compute(new Uint32Array(data), noun, verb));
