@@ -65,7 +65,7 @@ export const equation_one = (
 ): Array<number> => {
     const data = input.split(/,/).map(n => Number(n));
 
-    return [...compute(new Uint32Array(data), noun, verb)];
+    return Array.from(compute(new Uint32Array(data), noun, verb));
 };
 
 if (require.main === module) {
