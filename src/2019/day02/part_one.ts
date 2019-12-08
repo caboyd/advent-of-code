@@ -34,7 +34,7 @@ export const decode_instruction = (buffer: Uint32Array, stack_pointer: number): 
 export const compute = (
     buffer: Uint32Array,
     noun: number | undefined = undefined,
-    verb: number | undefined = undefined
+    verb: number | undefined = undefined,
 ): Uint32Array => {
     //apply noun and verb
     buffer[1] = noun || buffer[1];
@@ -61,7 +61,7 @@ export const compute = (
 export const equation_one = (
     input: string,
     noun: number | undefined = undefined,
-    verb: number | undefined = undefined
+    verb: number | undefined = undefined,
 ): Array<number> => {
     const data = input.split(/,/).map(n => Number(n));
 

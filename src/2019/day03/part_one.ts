@@ -11,7 +11,7 @@ export const equation_one = (input: string): number => {
 
     return Math.min(
         find_line_intersections(line1.horiz_lines, line2.vert_lines, manhattan_distance),
-        find_line_intersections(line2.horiz_lines, line1.vert_lines, manhattan_distance)
+        find_line_intersections(line2.horiz_lines, line1.vert_lines, manhattan_distance),
     );
 };
 

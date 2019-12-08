@@ -43,7 +43,7 @@ export interface Lines {
 export const find_line_intersections = (
     horiz: HorizLine[],
     vert: VertLine[],
-    distance_function: (h: HorizLine, v: VertLine) => number
+    distance_function: (h: HorizLine, v: VertLine) => number,
 ): number => {
     let shortest_distance = Number.MAX_SAFE_INTEGER;
 
