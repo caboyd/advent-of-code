@@ -8,5 +8,4 @@ describe(`${year} - Day${day} Part Two`, () => {
             expect(equation_two(await read_input(year, day))).toStrictEqual(results.two);
         });
     });
-
 });
