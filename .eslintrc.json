@@ -24,7 +24,8 @@
       "allowExpressions": true
     }],
     "@typescript-eslint/no-magic-numbers": ["error", { "ignoreEnums": true, "ignoreNumericLiteralTypes": true, "ignoreArrayIndexes": true, "ignore": [0,1] }],
-    "@typescript-eslint/prefer-for-of" : ["error"]
+    "@typescript-eslint/prefer-for-of" : ["error"],
+    "@typescript-eslint/no-namespace" : "off"
   },
   "overrides": [
     {
