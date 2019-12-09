@@ -13,9 +13,9 @@ export const read_input = async (year: number, day: number, file_name: string = 
     return (await promises.readFile(`${base_url}${file_name}`, {encoding: 'UTF-8'})) as string;
 };
 
-export const benchmark = <T>(f: () => T): T => {
+export const benchmark = async <T>(f: () => T): Promise<T> => {
     const start = performance.now();
-    const result = f();
+    const result = await f();
     console.log(`Time: ${performance.now() - start}`);
     return result;
 };

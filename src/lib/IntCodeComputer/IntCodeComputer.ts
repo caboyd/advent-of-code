@@ -1,10 +1,5 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 
-const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout,
-});
-
 enum OP_CODE {
     ADD = 1,
     MULT = 2,
@@ -19,9 +14,9 @@ enum PARAMETER_MODE {
 }
 
 interface Parameters {
-    src_addr1: number;
-    src_addr2: number;
-    dest_addr: number;
+    one: number;
+    two: number;
+    three: number;
 }
 
 export class IntCodeComputer {
@@ -29,6 +24,8 @@ export class IntCodeComputer {
     private memory: Int32Array;
     private instruction_pointer: number;
     public parameter_mode: boolean = false;
+    private last_output: number = 0;
+    private input_buffer: number[] | undefined;
 
     constructor(program: Int32Array | number[]) {
         this.backup_memory = new Int32Array(program);
@@ -39,6 +36,10 @@ export class IntCodeComputer {
     public load_program(program: Int32Array | number[]): void {
         this.backup_memory = new Int32Array(program);
         this.memory = new Int32Array(program);
+    }
+
+    public set_input_buffer(buffer: number[]): void {
+        this.input_buffer = Array.from(buffer);
     }
 
     public apply_noun(noun: number): void {
@@ -64,7 +65,7 @@ export class IntCodeComputer {
         return this.memory;
     }
 
-    public run(): void {
+    public async run(): Promise<number> {
         for (;;) {
             const instruction = this.memory[this.instruction_pointer];
             const op_code = instruction % 100;
@@ -78,23 +79,24 @@ export class IntCodeComputer {
                     this.mult(params);
                     break;
                 case OP_CODE.INPUT:
-                    this.input();
+                    await this.input(params);
                     break;
                 case OP_CODE.OUTPUT:
-                    this.output();
+                    this.output(params);
                     break;
             }
         }
+        return this.last_output;
     }
 
     private add(params: Parameters): void {
         // mem[dest] = mem[src1] + mem[src2]
-        this.memory[params.dest_addr] = this.memory[params.src_addr1] + this.memory[params.src_addr2];
+        this.memory[params.three] = this.memory[params.one] + this.memory[params.two];
         this.instruction_pointer += 4;
     }
     private mult(params: Parameters): void {
         //mem[dest] = mem[src1] * mem[src2]
-        this.memory[params.dest_addr] = this.memory[params.src_addr1] * this.memory[params.src_addr2];
+        this.memory[params.three] = this.memory[params.one] * this.memory[params.two];
         this.instruction_pointer += 4;
     }
 
@@ -111,38 +113,58 @@ export class IntCodeComputer {
             temp = Math.floor(temp / 10);
             p3 = temp % 10;
         }
-        const params: Parameters = {dest_addr: 0, src_addr1: 0, src_addr2: 0};
+        const params: Parameters = {three: 0, one: 0, two: 0};
         switch (op_code) {
             case OP_CODE.ADD:
             case OP_CODE.MULT:
-                params.src_addr1 = this.instruction_pointer + 1;
-                if (p1 === PARAMETER_MODE.POSITION) params.src_addr1 = this.memory[params.src_addr1];
-                params.src_addr2 = this.instruction_pointer + 2;
-                if (p2 === PARAMETER_MODE.POSITION) params.src_addr2 = this.memory[params.src_addr2];
-                params.dest_addr = this.instruction_pointer + 3;
-                if (p3 === PARAMETER_MODE.POSITION) params.dest_addr = this.memory[params.dest_addr];
-                break;
+                params.two = this.instruction_pointer + 2;
+                if (p2 === PARAMETER_MODE.POSITION) params.two = this.memory[params.two];
+                params.three = this.instruction_pointer + 3;
+                if (p3 === PARAMETER_MODE.POSITION) params.three = this.memory[params.three];
+            //FALLTHROUGH -- all instructions have param 1
             case OP_CODE.INPUT:
-                params.dest_addr = this.instruction_pointer + 1;
-                if (p1 === PARAMETER_MODE.POSITION) params.dest_addr = this.memory[params.dest_addr];
-                break;
             case OP_CODE.OUTPUT:
-                params.src_addr1 = this.instruction_pointer + 1;
-                if (p1 === PARAMETER_MODE.POSITION) params.src_addr1 = this.memory[params.src_addr1];
-                break;
+                params.one = this.instruction_pointer + 1;
+                if (p1 === PARAMETER_MODE.POSITION) params.one = this.memory[params.one];
         }
         return params;
     }
 
-    private input(): void {
-        readline.question('Input: ', (answer: string) => {
-            this.memory[this.memory[this.instruction_pointer + 1]] = Number(answer);
+    private async input(params: Parameters): Promise<void> {
+        const readline = require('readline').createInterface({
+            input: process.stdin,
+            output: process.stdout,
         });
+        //Synchronous read from console
+        const getLine = (function() {
+            const getLineGen = (async function*() {
+                for await (const line of readline) {
+                    yield line;
+                }
+            })();
+            return async () => (await getLineGen.next()).value;
+        })();
+
+        process.stdout.write('Input: ');
+
+        //Read from input buffer if not empty else read from prompt
+        if (this.input_buffer?.length) {
+            const n = Number(this.input_buffer.shift());
+            this.memory[params.one] = n;
+            process.stdout.write(`${n}\n`);
+        } else {
+            this.memory[params.one] = Number(await getLine());
+        }
+
         this.instruction_pointer += 2;
+
+        // Gotta pause stdin after we're done so it doesn't look like the process is stuck
+        process.stdin.pause();
     }
 
-    private output(): void {
-        console.log(this.memory[this.memory[this.instruction_pointer + 1]]);
+    private output(params: Parameters): void {
+        console.log(this.memory[params.one]);
+        this.last_output = this.memory[params.one];
         this.instruction_pointer += 2;
     }
 }

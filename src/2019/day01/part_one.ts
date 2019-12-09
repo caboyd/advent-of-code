@@ -12,6 +12,6 @@ export const equation_one = (input: string): number => {
 if (require.main === module) {
     (async () => {
         const input = await read_input(year, day);
-        console.log(`Result: ${benchmark(() => equation_one(input))}`); //3402634 ~0.16ms
+        console.log(`Result: ${await benchmark(() => equation_one(input))}`); //3402634 ~0.16ms
     })();
 }

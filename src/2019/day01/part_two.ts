@@ -20,6 +20,6 @@ export const equation_two = (input: string): number => {
 if (require.main === module) {
     (async () => {
         const input = await read_input(year, day);
-        console.log(`Result: ${benchmark(() => equation_two(input))}`); //5101069 ~0.23ms
+        console.log(`Result: ${await benchmark(() => equation_two(input))}`); //5101069 ~0.23ms
     })();
 }
