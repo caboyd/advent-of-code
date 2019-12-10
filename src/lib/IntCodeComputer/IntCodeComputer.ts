@@ -5,6 +5,10 @@ enum OP_CODE {
     MULT = 2,
     INPUT = 3,
     OUTPUT = 4,
+    JUMP_NOT_ZERO = 5,
+    JUMP_ZERO = 6,
+    LESS_THAN = 7,
+    EQUAL = 8,
     QUIT = 99,
 }
 
@@ -26,6 +30,7 @@ export class IntCodeComputer {
     public parameter_mode: boolean = false;
     private last_output: number = 0;
     private input_buffer: number[] | undefined;
+    public silent_mode: boolean = false;
 
     constructor(program: Int32Array | number[]) {
         this.backup_memory = new Int32Array(program);
@@ -84,20 +89,23 @@ export class IntCodeComputer {
                 case OP_CODE.OUTPUT:
                     this.output(params);
                     break;
+                case OP_CODE.JUMP_NOT_ZERO:
+                    this.jump_not_zero(params);
+                    break;
+                case OP_CODE.JUMP_ZERO:
+                    this.jump_zero(params);
+                    break;
+                case OP_CODE.LESS_THAN:
+                    this.less(params);
+                    break;
+                case OP_CODE.EQUAL:
+                    this.equal(params);
+                    break;
+                default:
+                    throw new Error(`Bad Instruction: ${op_code}`);
             }
         }
         return this.last_output;
-    }
-
-    private add(params: Parameters): void {
-        // mem[dest] = mem[src1] + mem[src2]
-        this.memory[params.three] = this.memory[params.one] + this.memory[params.two];
-        this.instruction_pointer += 4;
-    }
-    private mult(params: Parameters): void {
-        //mem[dest] = mem[src1] * mem[src2]
-        this.memory[params.three] = this.memory[params.one] * this.memory[params.two];
-        this.instruction_pointer += 4;
     }
 
     private decode_parameters(instruction: number): Parameters {
@@ -117,10 +125,15 @@ export class IntCodeComputer {
         switch (op_code) {
             case OP_CODE.ADD:
             case OP_CODE.MULT:
-                params.two = this.instruction_pointer + 2;
-                if (p2 === PARAMETER_MODE.POSITION) params.two = this.memory[params.two];
+            case OP_CODE.EQUAL:
+            case OP_CODE.LESS_THAN:
                 params.three = this.instruction_pointer + 3;
                 if (p3 === PARAMETER_MODE.POSITION) params.three = this.memory[params.three];
+            //FALLTHROUGH -- below instructions have param 2
+            case OP_CODE.JUMP_NOT_ZERO:
+            case OP_CODE.JUMP_ZERO:
+                params.two = this.instruction_pointer + 2;
+                if (p2 === PARAMETER_MODE.POSITION) params.two = this.memory[params.two];
             //FALLTHROUGH -- all instructions have param 1
             case OP_CODE.INPUT:
             case OP_CODE.OUTPUT:
@@ -128,6 +141,17 @@ export class IntCodeComputer {
                 if (p1 === PARAMETER_MODE.POSITION) params.one = this.memory[params.one];
         }
         return params;
+    }
+
+    private add(params: Parameters): void {
+        // mem[dest] = mem[src1] + mem[src2]
+        this.memory[params.three] = this.memory[params.one] + this.memory[params.two];
+        this.instruction_pointer += 4;
+    }
+    private mult(params: Parameters): void {
+        //mem[dest] = mem[src1] * mem[src2]
+        this.memory[params.three] = this.memory[params.one] * this.memory[params.two];
+        this.instruction_pointer += 4;
     }
 
     private async input(params: Parameters): Promise<void> {
@@ -145,13 +169,13 @@ export class IntCodeComputer {
             return async () => (await getLineGen.next()).value;
         })();
 
-        process.stdout.write('Input: ');
+        if (!this.silent_mode) process.stdout.write('Input: ');
 
         //Read from input buffer if not empty else read from prompt
         if (this.input_buffer?.length) {
             const n = Number(this.input_buffer.shift());
             this.memory[params.one] = n;
-            process.stdout.write(`${n}\n`);
+            if (!this.silent_mode) process.stdout.write(`${n}\n`);
         } else {
             this.memory[params.one] = Number(await getLine());
         }
@@ -163,8 +187,28 @@ export class IntCodeComputer {
     }
 
     private output(params: Parameters): void {
-        console.log(this.memory[params.one]);
+        if (!this.silent_mode) console.log(this.memory[params.one]);
         this.last_output = this.memory[params.one];
         this.instruction_pointer += 2;
+    }
+
+    private jump_not_zero(params: Parameters): void {
+        if (this.memory[params.one] !== 0) this.instruction_pointer = this.memory[params.two];
+        else this.instruction_pointer += 3;
+    }
+
+    private jump_zero(params: Parameters): void {
+        if (this.memory[params.one] === 0) this.instruction_pointer = this.memory[params.two];
+        else this.instruction_pointer += 3;
+    }
+
+    private less(params: Parameters): void {
+        this.memory[params.three] = this.memory[params.one] < this.memory[params.two] ? 1 : 0;
+        this.instruction_pointer += 4;
+    }
+
+    private equal(params: Parameters): void {
+        this.memory[params.three] = this.memory[params.one] === this.memory[params.two] ? 1 : 0;
+        this.instruction_pointer += 4;
     }
 }
