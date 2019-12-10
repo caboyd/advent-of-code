@@ -1,11 +1,11 @@
 import {day, part_one_input, results, year} from '../index';
 import {read_input} from '../../../lib';
-import {equation_one} from '../part_one';
+import {equation} from '../index';
 
 describe(`${year} - Day${day} Part One`, () => {
-    describe(equation_one, () => {
+    describe(equation, () => {
         it(`works with the given input, resolves ${results.one}`, async () => {
-            expect(await equation_one(await read_input(year, day), [part_one_input])).toStrictEqual(results.one);
+            expect(await equation(await read_input(year, day), [part_one_input])).toStrictEqual(results.one);
         });
     });
 });
