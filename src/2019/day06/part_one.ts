@@ -1,70 +1,67 @@
 import {benchmark, read_input} from '../../lib';
 import {day, year} from './index';
 
-interface OrbitEdge {
-    object: string;
-    orbiter: string;
-}
-
 export class OrbitObject {
     id: string;
-    children: OrbitObject[] | undefined;
+    children: OrbitObject[];
 
     constructor(id: string) {
         this.id = id;
+        this.children = [];
     }
 
-    public insert(parent_id: string, n: OrbitObject): boolean {
-        //new parent...
-
-        if (this.id === n.id) {
-            n.children = this.children;
-            this.id = parent_id;
-            this.children = [];
-            this.children.push(n);
-            return true;
-        }
-
+    public insert(parent_id: string, n: OrbitObject): string | null {
         if (this.id === parent_id) {
-            if (!this.children) this.children = [];
             this.children.push(n);
-            return true;
-        } else if (this.children) {
-            let insertable = false;
+            return n.id;
+        } else {
             for (const child of this.children) {
-                insertable = child.insert(parent_id, n);
-                if (insertable) break;
+                const result = child.insert(parent_id, n);
+                if (result !== null) return result;
             }
-            return insertable;
+            return null;
         }
-        return false;
     }
 
     public get_orbits(depth: number = 0): number {
         let total = 0;
-
-        if (this.children) {
-            for (const child of this.children) {
-                total += child.get_orbits(depth + 1);
-            }
+        for (const child of this.children) {
+            total += child.get_orbits(depth + 1);
         }
         return depth + total;
     }
 }
 
 export const equation_one = (input: string): number => {
-    const orbits: OrbitEdge[] = input.split(/\r?\n/).map(n => {
-        const o = n.split(/\)/);
-        return {object: o[0], orbiter: o[1]} as OrbitEdge;
+    const orbit_map: Map<string, string[]> = new Map<string, string[]>();
+    input.split(/\r?\n/).map(n => {
+        const pair = n.split(/\)/);
+        if (orbit_map.has(pair[0])) {
+            const arr = orbit_map.get(pair[0]);
+            if (arr) arr.push(pair[1]);
+        } else orbit_map.set(pair[0], [pair[1]]);
     });
-    // console.log(orbits);
-    const oo = new OrbitObject(orbits[0].object);
-    while (orbits.length > 0) {
-        for (let i = orbits.length - 1; i >= 0; i--) {
-            if (oo.insert(orbits[i].object, new OrbitObject(orbits[i].orbiter))) {
-                orbits.splice(i, 1);
+
+    let parent_objects: string[] = [];
+    let inserted_objects: string[] = [];
+    parent_objects.push('COM');
+    const oo = new OrbitObject('COM');
+
+    while (true) {
+        for (const parent of parent_objects) {
+            const children = orbit_map.get(parent);
+            if (!children) continue;
+
+            for (const child of children) {
+                let result;
+                if ((result = oo.insert(parent, new OrbitObject(child))) !== null) {
+                    inserted_objects.push(result);
+                }
             }
         }
+        parent_objects = inserted_objects;
+        if (!parent_objects.length) break;
+        inserted_objects = [];
     }
 
     return oo.get_orbits();
@@ -74,6 +71,6 @@ if (require.main === module) {
     (async () => {
         const input = await read_input(year, day);
 
-        console.log(`Result: ${await benchmark(async () => await equation_one(input))}`); //387356 ~2743ms
+        console.log(`Result: ${await benchmark(async () => await equation_one(input))}`); //387356 ~24 ms
     })();
 }
