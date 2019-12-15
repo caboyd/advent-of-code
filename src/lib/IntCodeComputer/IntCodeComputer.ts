@@ -27,15 +27,26 @@ export class IntCodeComputer {
     private backup_memory: Int32Array;
     private memory: Int32Array;
     private instruction_pointer: number;
-    public parameter_mode: boolean = false;
+    public parameter_mode: boolean = true;
     private last_output: number = 0;
     private input_buffer: number[] | undefined;
     public silent_mode: boolean = false;
+    public pause_on_output_mode: boolean = false;
+    private halted: boolean = false;
 
-    public constructor(program: Int32Array | number[]) {
-        this.backup_memory = new Int32Array(program);
+    public constructor(program: number[]) {
         this.memory = new Int32Array(program);
+        this.backup_memory = new Int32Array(program);
         this.instruction_pointer = 0;
+    }
+
+    public static fromInput(input: string): IntCodeComputer {
+        const data = input.split(/,/).map(n => Number(n));
+        return new IntCodeComputer(data);
+    }
+
+    public is_halted(): boolean {
+        return this.halted;
     }
 
     public load_program(program: Int32Array | number[]): void {
@@ -61,21 +72,19 @@ export class IntCodeComputer {
 
     public load_from_backup(): void {
         this.instruction_pointer = 0;
-        for (let i = 0; i < this.memory.length; i++) {
-            this.memory[i] = this.backup_memory[i];
-        }
+        this.halted = false;
+        this.memory.set(this.backup_memory);
     }
 
-    public read_memory(): Readonly<Int32Array> {
-        return this.memory;
+    public read_memory(): number[] {
+        return Array.from(this.memory);
     }
 
     public async run(): Promise<number> {
-        for (;;) {
+        const params = {} as Parameters;
+        run_loop: for (;;) {
             const instruction = this.memory[this.instruction_pointer];
-            const op_code = instruction % 100;
-            if (op_code === OP_CODE.QUIT) break;
-            const params = this.decode_parameters(instruction);
+            const op_code = this.decode_parameters(instruction, params);
             switch (op_code) {
                 case OP_CODE.ADD:
                     this.add(params);
@@ -88,6 +97,7 @@ export class IntCodeComputer {
                     break;
                 case OP_CODE.OUTPUT:
                     this.output(params);
+                    if (this.pause_on_output_mode) return this.last_output;
                     break;
                 case OP_CODE.JUMP_NOT_ZERO:
                     this.jump_not_zero(params);
@@ -101,46 +111,45 @@ export class IntCodeComputer {
                 case OP_CODE.EQUAL:
                     this.equal(params);
                     break;
+                case OP_CODE.QUIT:
+                    break run_loop;
                 default:
                     throw new Error(`Bad Instruction: ${op_code}`);
             }
         }
+        this.halted = true;
         return this.last_output;
     }
 
-    private decode_parameters(instruction: number): Parameters {
+    private decode_parameters(instruction: number, out_params: Parameters): number {
         const op_code = instruction % 100;
-        let p1 = 0,
-            p2 = 0,
-            p3 = 0;
+        let p1 = PARAMETER_MODE.POSITION,
+            p2 = PARAMETER_MODE.POSITION;
+
         if (this.parameter_mode) {
             let temp = Math.floor(instruction / 100);
             p1 = temp % 10;
             temp = Math.floor(temp / 10);
             p2 = temp % 10;
-            temp = Math.floor(temp / 10);
-            p3 = temp % 10;
         }
-        const params: Parameters = {three: 0, one: 0, two: 0};
         switch (op_code) {
             case OP_CODE.ADD:
             case OP_CODE.MULT:
             case OP_CODE.EQUAL:
             case OP_CODE.LESS_THAN:
-                params.three = this.instruction_pointer + 3;
-                if (p3 === PARAMETER_MODE.POSITION) params.three = this.memory[params.three];
+                out_params.three = this.memory[this.instruction_pointer + 3];
             //FALLTHROUGH -- below instructions have param 2
             case OP_CODE.JUMP_NOT_ZERO:
             case OP_CODE.JUMP_ZERO:
-                params.two = this.instruction_pointer + 2;
-                if (p2 === PARAMETER_MODE.POSITION) params.two = this.memory[params.two];
+                if (p2 === PARAMETER_MODE.IMMEDIATE) out_params.two = this.instruction_pointer + 2;
+                else out_params.two = this.memory[this.instruction_pointer + 2];
             //FALLTHROUGH -- all instructions have param 1
             case OP_CODE.INPUT:
             case OP_CODE.OUTPUT:
-                params.one = this.instruction_pointer + 1;
-                if (p1 === PARAMETER_MODE.POSITION) params.one = this.memory[params.one];
+                if (p1 === PARAMETER_MODE.IMMEDIATE) out_params.one = this.instruction_pointer + 1;
+                else out_params.one = this.memory[this.instruction_pointer + 1];
         }
-        return params;
+        return op_code;
     }
 
     private add(params: Parameters): void {
@@ -155,20 +164,6 @@ export class IntCodeComputer {
     }
 
     private async input(params: Parameters): Promise<void> {
-        const readline = require('readline').createInterface({
-            input: process.stdin,
-            output: process.stdout,
-        });
-        //Synchronous read from console
-        const getLine = (function() {
-            const getLineGen = (async function*() {
-                for await (const line of readline) {
-                    yield line;
-                }
-            })();
-            return async () => (await getLineGen.next()).value;
-        })();
-
         if (!this.silent_mode) process.stdout.write('Input: ');
 
         //Read from input buffer if not empty else read from prompt
@@ -177,13 +172,29 @@ export class IntCodeComputer {
             this.memory[params.one] = n;
             if (!this.silent_mode) process.stdout.write(`${n}\n`);
         } else {
-            this.memory[params.one] = Number(await getLine());
+            this.memory[params.one] = await this.input_from_console();
+            // Gotta pause stdin after we're done so it doesn't look like the process is stuck
+            process.stdin.pause();
         }
 
         this.instruction_pointer += 2;
+    }
 
-        // Gotta pause stdin after we're done so it doesn't look like the process is stuck
-        process.stdin.pause();
+    private async input_from_console(): Promise<number> {
+        //Synchronous read from console
+        const getLine = (function() {
+            const readline = require('readline').createInterface({
+                input: process.stdin,
+                output: process.stdout,
+            });
+            const getLineGen = (async function*() {
+                for await (const line of readline) {
+                    yield line;
+                }
+            })();
+            return async () => (await getLineGen.next()).value;
+        })();
+        return Number(await getLine());
     }
 
     private output(params: Parameters): void {

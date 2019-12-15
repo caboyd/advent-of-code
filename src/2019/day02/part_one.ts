@@ -7,14 +7,12 @@ export const equation_one = async (
     noun: number | undefined = undefined,
     verb: number | undefined = undefined,
 ): Promise<number[]> => {
-    const data = input.split(/,/).map(n => Number(n));
-
-    const pc = new IntCodeComputer(data);
+    const pc = IntCodeComputer.fromInput(input);
+    pc.parameter_mode = false;
     if (noun) pc.apply_noun(noun);
     if (verb) pc.apply_verb(verb);
     await pc.run();
-
-    return Array.from(pc.read_memory());
+    return pc.read_memory();
 };
 
 if (require.main === module) {
