@@ -9,10 +9,10 @@ export const results: Results = {
 };
 
 export class OrbitObject {
-    id: string;
-    children: OrbitObject[];
+    private readonly id: string;
+    private readonly children: OrbitObject[];
 
-    constructor(id: string) {
+    public constructor(id: string) {
         this.id = id;
         this.children = [];
     }

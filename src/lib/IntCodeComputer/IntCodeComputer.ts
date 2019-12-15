@@ -32,7 +32,7 @@ export class IntCodeComputer {
     private input_buffer: number[] | undefined;
     public silent_mode: boolean = false;
 
-    constructor(program: Int32Array | number[]) {
+    public constructor(program: Int32Array | number[]) {
         this.backup_memory = new Int32Array(program);
         this.memory = new Int32Array(program);
         this.instruction_pointer = 0;
