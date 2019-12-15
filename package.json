@@ -3,13 +3,19 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "jest",
-    "go": "ts-node -r tsconfig-path/register"
+  "author": {
+    "name": "Chris Boyd",
+    "url": "https://github.com/caboyd"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/caboyd/advent-of-code/"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "license": "MIT",
+  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^24.0.23",
     "@types/node": "^12.12.14",
@@ -24,6 +30,5 @@
     "ts-node": "^8.5.4",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.7.3"
-  },
-  "dependencies": {}
+  }
 }
