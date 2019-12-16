@@ -25,26 +25,29 @@ interface Parameters {
     three: number;
 }
 
-export class IntCodeComputer {
+export class IntCodeComputer<T = BigInt64Array> {
     private backup_memory: BigInt64Array;
     private memory: BigInt64Array;
     private instruction_pointer: number;
-    public parameter_mode: boolean = true;
     private last_output: number = 0;
     private input_buffer: number[] | undefined;
-    public silent_mode: boolean = false;
-    public pause_on_output_mode: boolean = false;
     private halted: boolean = false;
     private relative_base: number = 0;
 
-    public constructor(program: number[]) {
+    public parameter_mode: boolean = true;
+    public silent_mode: boolean = false;
+    public pause_on_output_mode: boolean = false;
+
+    public constructor(program: number[] | bigint[]) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
         this.memory = BigInt64Array.from(program.map(BigInt));
-        this.backup_memory = BigInt64Array.from(program.map(BigInt));
+        this.backup_memory = BigInt64Array.from(this.memory);
         this.instruction_pointer = 0;
     }
 
     public static fromInput(input: string): IntCodeComputer {
-        const data = input.split(/,/).map(n => Number(n));
+        const data = input.split(/,/).map(n => BigInt(n));
         return new IntCodeComputer(data);
     }
 
@@ -53,8 +56,8 @@ export class IntCodeComputer {
     }
 
     public load_program(program: number[]): void {
-        this.backup_memory = BigInt64Array.from(program.map(BigInt));
         this.memory = BigInt64Array.from(program.map(BigInt));
+        this.backup_memory = BigInt64Array.from(this.memory);
     }
 
     public set_input_buffer(buffer: number[]): void {
@@ -93,29 +96,29 @@ export class IntCodeComputer {
             const op_code = this.decode_instruction(instruction, params);
             switch (op_code) {
                 case OP_CODE.ADD:
-                    this.add(params);
+                    this.op_add(params);
                     break;
                 case OP_CODE.MULT:
-                    this.mult(params);
+                    this.op_mult(params);
                     break;
                 case OP_CODE.INPUT:
-                    await this.input(params);
+                    await this.op_input(params);
                     break;
                 case OP_CODE.OUTPUT:
-                    this.output(params);
+                    this.op_output(params);
                     if (this.pause_on_output_mode) return this.last_output;
                     break;
                 case OP_CODE.JUMP_NOT_ZERO:
-                    this.jump_not_zero(params);
+                    this.op_jump_not_zero(params);
                     break;
                 case OP_CODE.JUMP_ZERO:
-                    this.jump_zero(params);
+                    this.op_jump_zero(params);
                     break;
                 case OP_CODE.LESS_THAN:
-                    this.less(params);
+                    this.op_less(params);
                     break;
                 case OP_CODE.EQUAL:
-                    this.equal(params);
+                    this.op_equal(params);
                     break;
                 case OP_CODE.MODE_RELATIVE_BASE:
                     this.op_mod_relative_base(params);
@@ -133,20 +136,29 @@ export class IntCodeComputer {
     private decode_instruction(instruction: number, out_params: Parameters): number {
         const op_code = instruction % 100;
         let p1 = PARAMETER_MODE.POSITION,
-            p2 = PARAMETER_MODE.POSITION;
-
+            p2 = PARAMETER_MODE.POSITION,
+            p3 = PARAMETER_MODE.POSITION;
         if (this.parameter_mode) {
             let temp = Math.floor(instruction / 100);
             p1 = temp % 10;
             temp = Math.floor(temp / 10);
             p2 = temp % 10;
+            temp = Math.floor(temp / 10);
+            p3 = temp % 10;
         }
         switch (op_code) {
             case OP_CODE.ADD:
             case OP_CODE.MULT:
             case OP_CODE.EQUAL:
             case OP_CODE.LESS_THAN:
-                out_params.three = Number(this.memory[this.instruction_pointer + 3]);
+                if (p3 === PARAMETER_MODE.RELATIVE)
+                    out_params.three = this.relative_base + Number(this.memory[this.instruction_pointer + 3]);
+                else out_params.three = Number(this.memory[this.instruction_pointer + 3]);
+                if (out_params.three >= this.memory.length) {
+                    const new_arr = new BigInt64Array(out_params.three + 1).fill(0n);
+                    new_arr.set(this.memory);
+                    this.memory = new_arr;
+                }
             //FALLTHROUGH -- below instructions have param 2
             case OP_CODE.JUMP_NOT_ZERO:
             case OP_CODE.JUMP_ZERO:
@@ -166,18 +178,18 @@ export class IntCodeComputer {
         return op_code;
     }
 
-    private add(params: Parameters): void {
+    private op_add(params: Parameters): void {
         // mem[dest] = mem[src1] + mem[src2]
-        this.memory[params.three] = this.memory[params.one] + this.memory[params.two];
+        this.memory[params.three] = BigInt(this.memory[params.one]) + BigInt(this.memory[params.two]);
         this.instruction_pointer += 4;
     }
-    private mult(params: Parameters): void {
+    private op_mult(params: Parameters): void {
         //mem[dest] = mem[src1] * mem[src2]
         this.memory[params.three] = this.memory[params.one] * this.memory[params.two];
         this.instruction_pointer += 4;
     }
 
-    private async input(params: Parameters): Promise<void> {
+    private async op_input(params: Parameters): Promise<void> {
         if (!this.silent_mode) process.stdout.write('Input: ');
 
         //Read from input buffer if not empty else read from prompt
@@ -211,28 +223,28 @@ export class IntCodeComputer {
         return BigInt(await getLine());
     }
 
-    private output(params: Parameters): void {
+    private op_output(params: Parameters): void {
         if (!this.silent_mode) console.log(this.memory[params.one]);
         this.last_output = Number(this.memory[params.one]);
         this.instruction_pointer += 2;
     }
 
-    private jump_not_zero(params: Parameters): void {
+    private op_jump_not_zero(params: Parameters): void {
         if (this.memory[params.one] !== 0n) this.instruction_pointer = Number(this.memory[params.two]);
         else this.instruction_pointer += 3;
     }
 
-    private jump_zero(params: Parameters): void {
+    private op_jump_zero(params: Parameters): void {
         if (this.memory[params.one] === 0n) this.instruction_pointer = Number(this.memory[params.two]);
         else this.instruction_pointer += 3;
     }
 
-    private less(params: Parameters): void {
+    private op_less(params: Parameters): void {
         this.memory[params.three] = this.memory[params.one] < this.memory[params.two] ? 1n : 0n;
         this.instruction_pointer += 4;
     }
 
-    private equal(params: Parameters): void {
+    private op_equal(params: Parameters): void {
         this.memory[params.three] = this.memory[params.one] === this.memory[params.two] ? 1n : 0n;
         this.instruction_pointer += 4;
     }
