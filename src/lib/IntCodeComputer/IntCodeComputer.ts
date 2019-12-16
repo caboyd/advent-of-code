@@ -84,7 +84,7 @@ export class IntCodeComputer {
         const params = {} as Parameters;
         run_loop: for (;;) {
             const instruction = this.memory[this.instruction_pointer];
-            const op_code = this.decode_parameters(instruction, params);
+            const op_code = this.decode_instruction(instruction, params);
             switch (op_code) {
                 case OP_CODE.ADD:
                     this.add(params);
@@ -121,7 +121,7 @@ export class IntCodeComputer {
         return this.last_output;
     }
 
-    private decode_parameters(instruction: number, out_params: Parameters): number {
+    private decode_instruction(instruction: number, out_params: Parameters): number {
         const op_code = instruction % 100;
         let p1 = PARAMETER_MODE.POSITION,
             p2 = PARAMETER_MODE.POSITION;
