@@ -77,6 +77,6 @@ export const equation_one = async (input: string): Promise<number> => {
 if (require.main === module) {
     (async () => {
         const input = await read_input(year, day);
-        console.log(`Result: ${await benchmark(async () => await equation_one(input))}`); //256 22ms
+        console.log(`Result: ${await benchmark(async () => await equation_one(input))}`); //256 rocks @ [29,28] 22ms
     })();
 }
