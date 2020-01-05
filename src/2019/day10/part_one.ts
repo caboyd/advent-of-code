@@ -1,74 +1,82 @@
 import {benchmark, read_input} from '../../lib';
 import {day, year} from './index';
 
-type Vec2 = [number, number];
-
 const gcd = (a: number, b: number): number => (!b ? a : gcd(b, a % b));
 
 export const equation_one = async (input: string): Promise<number> => {
     const data = input.split(/\r?\n/).map(n => n.split(''));
-    const copy = input.split(/\r?\n/).map(n => n.split(''));
+    const copy = JSON.parse(JSON.stringify(data));
 
     const WIDTH = data[0].length;
     const HEIGHT = data.length;
 
-    let count = 0;
-
-    function find_and_block_rocks(data: string[][], station: Vec2, rock_spot: Vec2): boolean {
-        if (data[rock_spot[1]][rock_spot[0]] !== '#') {
-            return false;
-        }
-        data[rock_spot[1]][rock_spot[0]] = 'G';
-        //found one in line of sigh
-        //block all ones along path
-        const gcd1 = gcd(Math.abs(rock_spot[0] - station[0]), Math.abs(rock_spot[1] - station[1]));
-        const x_factor = (rock_spot[0] - station[0]) / gcd1;
-        const y_factor = (rock_spot[1] - station[1]) / gcd1;
+    const block_rocks = (station_x: number, station_y: number, rock_x: number, rock_y: number): boolean => {
+        const rock_relative_to_station = [rock_x - station_x, rock_y - station_y];
+        const gcd1 = gcd(Math.abs(rock_relative_to_station[0]), Math.abs(rock_relative_to_station[1]));
+        const x_factor = rock_relative_to_station[0] / gcd1;
+        const y_factor = rock_relative_to_station[1] / gcd1;
+        //Now that we have the multiples of x and y we can jump along the path and block all rocks behind this one
         for (
-            let x = station[0] + x_factor * 2, y = station[1] + y_factor * 2;
+            let x = rock_x + x_factor, y = rock_y + y_factor;
             y < HEIGHT && x < WIDTH && x >= 0 && y >= 0;
             x += x_factor, y += y_factor
         ) {
             if (data[y][x] === '#') data[y][x] = 'B';
         }
         return true;
-    }
+    };
 
-    for (let start_y = 0; start_y < HEIGHT; start_y++) {
-        for (let start_x = 0; start_x < WIDTH; start_x++) {
-            const station: Vec2 = [start_x, start_y];
-            const item = data[start_y][start_x];
+    const is_rock = (x: number, y: number, station_x: number, station_y: number): boolean => {
+        if (data[y][x] !== '#') return false;
+        data[y][x] = 'G';
+        block_rocks(station_x, station_y, x, y);
+        return true;
+    };
+
+    //Count rocks visible from this station location
+    const count_rocks = (station_x: number, station_y: number): number => {
+        let count = 0;
+        //rocks to the right of station
+        for (let i = station_x + 1; i <= WIDTH - 1; i++) {
+            if (is_rock(i, station_y, station_x, station_y)) count++;
+        }
+        //rocks to the left of station
+        for (let i = station_x - 1; i >= 0; i--) {
+            if (is_rock(i, station_y, station_x, station_y)) count++;
+        }
+        //all rock lines below station (left to right)
+        for (let y = station_y + 1; y <= HEIGHT - 1; y++)
+            for (let x = 0; x <= WIDTH - 1; x++) {
+                if (is_rock(x, y, station_x, station_y)) count++;
+            }
+        //all rock lines above station (left to right)
+        for (let y = station_y - 1; y >= 0; y--)
+            for (let x = 0; x <= WIDTH - 1; x++) {
+                if (is_rock(x, y, station_x, station_y)) count++;
+            }
+        return count;
+    };
+
+    let best_count = 0;
+    for (let station_y = 0; station_y < HEIGHT; station_y++) {
+        for (let station_x = 0; station_x < WIDTH; station_x++) {
+            const item = data[station_y][station_x];
+            //not a station
             if (item !== '#') continue;
-            let curr_count = 0;
+            const count = count_rocks(station_x, station_y);
 
-            //to the right
-            for (let i = start_x + 1; i <= WIDTH - 1; i++)
-                if (find_and_block_rocks(data, station, [i, start_y])) curr_count++;
-            //to the left
-            for (let i = start_x - 1; i >= 0; i--) if (find_and_block_rocks(data, station, [i, start_y])) curr_count++;
-            //all lines below
-            for (let y = start_y + 1; y <= HEIGHT - 1; y++)
-                for (let x = 0; x <= WIDTH - 1; x++) {
-                    if (find_and_block_rocks(data, station, [x, y])) curr_count++;
-                }
-            //all lines above
-            for (let y = start_y - 1; y >= 0; y--)
-                for (let x = 0; x <= WIDTH - 1; x++) {
-                    if (find_and_block_rocks(data, station, [x, y])) curr_count++;
-                }
-
-            count = Math.max(count, curr_count);
+            best_count = Math.max(best_count, count);
+            //reset data
             for (let i = 0; i < data.length; i++) for (let j = 0; j < data[i].length; j++) data[i][j] = copy[i][j];
         }
     }
 
-    return count;
+    return best_count;
 };
 
 if (require.main === module) {
     (async () => {
         const input = await read_input(year, day);
-
-        console.log(`Result: ${await benchmark(async () => await equation_one(input))}`); //
+        console.log(`Result: ${await benchmark(async () => await equation_one(input))}`); //256 22ms
     })();
 }
