@@ -5,14 +5,14 @@
 [![2019 Progress](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/caboyd/advent-of-code/master/.badges/2019.json)](src/2019)
 [![2020 Progress](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/caboyd/advent-of-code/master/.badges/2020.json)](src/2020)
 
-##2020
+## 2020
 
 |Day|Part 1|Part 2|
 |---|----|----|
 |01|[todo](src/2020/day01/part_one.ts) | [todo](src/2020/day01/part_two.ts) |
 
 
-##2019
+## 2019
 
 |Day|Part 1|Part 2|
 |---|----|----|
