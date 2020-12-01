@@ -5,7 +5,7 @@ import {day, year} from './index';
 export const equation_two = (input: string): number => {
     return input
         .split(/\r?\n/)
-        .map(n => {
+        .map((n) => {
             let fuel = 0;
             let remaining_mass = Number(n);
             for (;;) {

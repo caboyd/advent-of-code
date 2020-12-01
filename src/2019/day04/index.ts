@@ -19,7 +19,7 @@ export const num_to_digits = (n: number, arr: number[]): number[] => {
 };
 
 export const password_solver = (input: string, invariant: (digits: number[]) => boolean): number => {
-    const [min, max] = input.split(/-/).map(n => Number(n));
+    const [min, max] = input.split(/-/).map((n) => Number(n));
     let count = 0;
     const digits = new Array(DIGITS);
     for (let i = min; i < max; i++) {

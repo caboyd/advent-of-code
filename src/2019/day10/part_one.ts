@@ -4,7 +4,7 @@ import {day, year} from './index';
 const gcd = (a: number, b: number): number => (!b ? a : gcd(b, a % b));
 
 export const equation_one = async (input: string): Promise<number> => {
-    const data = input.split(/\r?\n/).map(n => n.split(''));
+    const data = input.split(/\r?\n/).map((n) => n.split(''));
     const copy = JSON.parse(JSON.stringify(data));
 
     const WIDTH = data[0].length;

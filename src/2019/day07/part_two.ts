@@ -3,7 +3,7 @@ import {day, permute, year} from './index';
 import {IntCodeComputer} from '../../lib/IntCodeComputer/IntCodeComputer';
 
 export const equation_two = async (input: string): Promise<number> => {
-    const data = input.split(/,/).map(n => Number(n));
+    const data = input.split(/,/).map((n) => Number(n));
 
     const count = 5;
     const pcs = Array<IntCodeComputer>(count);

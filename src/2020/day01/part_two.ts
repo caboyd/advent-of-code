@@ -6,7 +6,7 @@ interface O {
 }
 
 export const equation_two = (input: string): number => {
-    const arr = input.split(/\r?\n/).map(n => Number(n));
+    const arr = input.split(/\r?\n/).map((n) => Number(n));
 
     for (const item of arr) {
         const pair_found = {} as O;

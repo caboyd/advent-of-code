@@ -66,11 +66,11 @@ export const find_line_intersections = (
 };
 
 export const build_lines = (input: string): Lines[] => {
-    return input.split(/\r?\n/).map(s => {
+    return input.split(/\r?\n/).map((s) => {
         const path_walker: Vec2 = {x: 0, y: 0};
         let steps = 0;
         const lines: Lines = {vert_lines: [], horiz_lines: []};
-        s.split(/,/).map(n => {
+        s.split(/,/).map((n) => {
             const cardinal = n[0];
             const len = Number(n.slice(1));
             switch (cardinal) {

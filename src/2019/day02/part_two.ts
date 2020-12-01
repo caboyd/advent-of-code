@@ -7,7 +7,7 @@ const verb_max = 100;
 const gravity_assist_output = 19690720;
 
 export const equation_two = async (input: string): Promise<number> => {
-    const data = input.split(/,/).map(n => Number(n));
+    const data = input.split(/,/).map((n) => Number(n));
     const pc = new IntCodeComputer(data);
 
     for (let noun = 0; noun < noun_max; noun++) {

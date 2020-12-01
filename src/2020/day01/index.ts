@@ -5,5 +5,5 @@ export const day = 1;
 
 export const results: Results = {
     one: 55776,
-    two: 0,
+    two: 223162626,
 };

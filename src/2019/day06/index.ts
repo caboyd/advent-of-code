@@ -46,7 +46,7 @@ export class OrbitObject {
 
     public static gen_orbit_map(input: string): Map<string, string[]> {
         const orbit_map: Map<string, string[]> = new Map<string, string[]>();
-        input.split(/\r?\n/).map(line => {
+        input.split(/\r?\n/).map((line) => {
             const pair = line.split(/\)/);
             if (orbit_map.has(pair[0])) {
                 const arr = orbit_map.get(pair[0]);

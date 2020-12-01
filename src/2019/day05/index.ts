@@ -13,7 +13,7 @@ export const results: Results = {
 };
 
 export const equation = async (input: string, input_buffer: number[] | undefined = undefined): Promise<number> => {
-    const data = input.split(/,/).map(n => Number(n));
+    const data = input.split(/,/).map((n) => Number(n));
 
     const pc = new IntCodeComputer(data);
     pc.parameter_mode = true;

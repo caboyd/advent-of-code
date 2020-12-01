@@ -14,7 +14,7 @@ export const build_path = (child: string, parent: string, reverse_orbit_map: Map
 
 export const equation_two = (input: string): number => {
     const reverse_orbit_map = new Map<string, string>();
-    input.split(/\r?\n/).map(line => {
+    input.split(/\r?\n/).map((line) => {
         const pair = line.split(/\)/);
         reverse_orbit_map.set(pair[1], pair[0]);
     });
@@ -24,7 +24,7 @@ export const equation_two = (input: string): number => {
     const p2 = build_path('SAN', 'COM', reverse_orbit_map);
 
     //intersect arrays to find first common ancestor
-    const ancestor = p1.filter(v => p2.includes(v))[0];
+    const ancestor = p1.filter((v) => p2.includes(v))[0];
 
     //distances
     const d1 = p1.lastIndexOf(ancestor);

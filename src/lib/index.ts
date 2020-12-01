@@ -10,7 +10,7 @@ export const read_input = async (year: number, day: number, file_name: string = 
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     const base_url = `src/${year}/day${day < 10 ? '0' : ''}${day}/resources/`;
 
-    return (await promises.readFile(`${base_url}${file_name}`, {encoding: 'UTF-8'})) as string;
+    return (await promises.readFile(`${base_url}${file_name}`, 'utf-8')) as string;
 };
 
 export const benchmark = async <T>(f: () => T): Promise<T> => {

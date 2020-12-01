@@ -8,7 +8,7 @@ const STATION_Y = 28;
 const ROCK_200 = 200;
 
 export const equation_two = async (input: string, station_x: number, station_y: number): Promise<number> => {
-    const data = input.split(/\r?\n/).map(n => n.split(''));
+    const data = input.split(/\r?\n/).map((n) => n.split(''));
 
     const WIDTH = data[0].length;
     const HEIGHT = data.length;
@@ -16,7 +16,8 @@ export const equation_two = async (input: string, station_x: number, station_y: 
     const angle_map = new Map<number, Vec2[]>();
 
     const insert = (angle: number, rock: Vec2): void => {
-        if (angle_map.has(angle)) angle_map.get(angle)!.push(rock);
+        const pos = angle_map.get(angle);
+        if (pos !== undefined) pos.push(rock);
         else angle_map.set(angle, [rock]);
     };
 
@@ -24,7 +25,7 @@ export const equation_two = async (input: string, station_x: number, station_y: 
         return data[y][x] === '#';
     };
 
-    //because topleft is 0,0
+    //because top left is 0,0
     //x:0,y:-1 is 0 rads
     //increasing clockwise
     const get_angle = (x: number, y: number): number => {
@@ -62,9 +63,10 @@ export const equation_two = async (input: string, station_x: number, station_y: 
     const sorted = new Map([...angle_map.entries()].sort());
 
     let count = 0;
-    let rock_200: Vec2 = [0, 0];
+    let rock_200: Vec2 | undefined = [0, 0];
     until_200: do {
         for (const [key, value] of sorted.entries()) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             rock_200 = value.shift()!;
             count++;
             if (count === ROCK_200) break until_200;

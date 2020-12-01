@@ -25,7 +25,7 @@ interface Parameters {
     three: number;
 }
 
-export class IntCodeComputer<T = BigInt64Array> {
+export class IntCodeComputer {
     private backup_memory: BigInt64Array;
     private memory: BigInt64Array;
     private instruction_pointer: number;
@@ -38,16 +38,14 @@ export class IntCodeComputer<T = BigInt64Array> {
     public silent_mode: boolean = false;
     public pause_on_output_mode: boolean = false;
 
-    public constructor(program: number[] | bigint[]) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-        // @ts-ignore
+    public constructor(program: (number | bigint)[]) {
         this.memory = BigInt64Array.from(program.map(BigInt));
         this.backup_memory = BigInt64Array.from(this.memory);
         this.instruction_pointer = 0;
     }
 
     public static fromInput(input: string): IntCodeComputer {
-        const data = input.split(/,/).map(n => BigInt(n));
+        const data = input.split(/,/).map((n) => BigInt(n));
         return new IntCodeComputer(data);
     }
 
@@ -208,12 +206,13 @@ export class IntCodeComputer<T = BigInt64Array> {
 
     private async input_from_console(): Promise<bigint> {
         //Synchronous read from console
-        const getLine = (function() {
+        const getLine = (function () {
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
             const readline = require('readline').createInterface({
                 input: process.stdin,
                 output: process.stdout,
             });
-            const getLineGen = (async function*() {
+            const getLineGen = (async function* () {
                 for await (const line of readline) {
                     yield line;
                 }
