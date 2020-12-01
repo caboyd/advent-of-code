@@ -9,7 +9,7 @@
 
 |Day|Part 1|Part 2|
 |---|----|----|
-|01|[todo](src/2020/day01/part_one.ts) | [todo](src/2020/day01/part_two.ts) |
+|01|[0.25ms](src/2020/day01/part_one.ts) | [15.7ms](src/2020/day01/part_two.ts) |
 
 
 ## 2019
