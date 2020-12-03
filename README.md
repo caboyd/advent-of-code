@@ -11,6 +11,7 @@
 |---|----|----|
 |01|[0.25ms](src/2020/day01/part_one.ts) | [15.7ms](src/2020/day01/part_two.ts) |
 |02|[2.52ms](src/2020/day02/part_one.ts) | [2.22ms](src/2020/day02/part_two.ts) |
+|02|[0.22ms](src/2020/day03/part_one.ts) | [0.48ms](src/2020/day03/part_two.ts) |
 ## 2019
 
 |Day|Part 1|Part 2|
