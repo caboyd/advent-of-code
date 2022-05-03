@@ -38,7 +38,7 @@ export function isValidPassport(passport: Passport): boolean {
     if (parseInt(passport.iyr) < 2010 || parseInt(passport.iyr) > 2020) return false;
     if (parseInt(passport.eyr) < 2020 || parseInt(passport.eyr) > 2030) return false;
 
-    if (passport.hgt === '184') console.log(passport.hgt);
+    //if (passport.hgt === '184') console.log(passport.hgt);
 
     if (passport.hgt.includes('cm')) {
         if (parseInt(passport.hgt) < 150 || parseInt(passport.hgt) > 193) return false;

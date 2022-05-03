@@ -35,7 +35,7 @@ export const equation_two = (input: string): number => {
                         }
                     }
 
-                    console.log(valid_heads);
+                    //console.log(valid_heads);
                     break;
                 }
             }
