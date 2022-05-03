@@ -192,7 +192,8 @@ export class IntCodeComputer {
 
         //Read from input buffer if not empty else read from prompt
         if (this.input_buffer && this.input_buffer.length) {
-            const n = BigInt(this.input_buffer.shift());
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const n = BigInt(this.input_buffer.shift()!);
             this.memory[params.one] = n;
             if (!this.silent_mode) process.stdout.write(`${n}\n`);
         } else {
