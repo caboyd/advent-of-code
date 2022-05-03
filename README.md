@@ -13,6 +13,7 @@
 | 01  | [0.40ms](src/2021/day01/part_one.ts) | [0.41ms](src/2021/day01/part_two.ts) |
 | 02  | [0.81ms](src/2021/day02/part_one.ts) | [0.83ms](src/2021/day02/part_two.ts) |
 | 03  | [3.06ms](src/2021/day03/part_one.ts) | [0.87ms](src/2021/day03/part_two.ts) |
+| 04  | [8.52ms](src/2021/day04/part_one.ts) | [22.7ms](src/2021/day04/part_two.ts) |
 
 ## 2019
 

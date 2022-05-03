@@ -26,20 +26,7 @@
                 "allowExpressions": true
             }
         ],
-        "@typescript-eslint/no-magic-numbers": [
-            "error",
-            {"ignoreEnums": true, "ignoreNumericLiteralTypes": true, "ignoreArrayIndexes": true, "ignore": [0, 1, 2]}
-        ],
-        "@typescript-eslint/prefer-for-of": ["error"],
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/explicit-member-accessibility": ["error"]
-    },
-    "overrides": [
-        {
-            "files": ["*.spec.ts"],
-            "rules": {
-                "@typescript-eslint/no-magic-numbers": "off"
-            }
-        }
-    ]
+    }
 }
