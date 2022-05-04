@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import {benchmark, read_input} from 'src/lib';
 import {day, year} from './index';
 import {equation_one} from './part_one';

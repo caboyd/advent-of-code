@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import {benchmark, read_input} from 'src/lib';
 import {day, year} from './index';
 
@@ -22,7 +21,7 @@ export const equation_one = (input: string): number => {
         }
     } while (valid_heads_pre_length !== valid_heads.length);
 
-    return valid_heads.length-1;
+    return valid_heads.length - 1;
 };
 
 if (require.main === module) {

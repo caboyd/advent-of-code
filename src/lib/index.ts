@@ -7,7 +7,6 @@ export interface Results<T = number, K = T> {
 }
 
 export const read_input = async (year: number, day: number, file_name: string = 'input.txt'): Promise<string> => {
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     const base_url = `src/${year}/day${day < 10 ? '0' : ''}${day}/resources/`;
 
     return (await promises.readFile(`${base_url}${file_name}`, 'utf-8')) as string;

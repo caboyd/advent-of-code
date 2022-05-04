@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import {benchmark, read_input} from 'src/lib';
 import {day, year} from './index';
 
@@ -14,8 +13,7 @@ export const equation_one = (input: string): number => {
                 if (Number(lines[x]) + Number(lines[y]) === num_to_find) found = true;
             }
         }
-        if (!found)
-            return num_to_find;
+        if (!found) return num_to_find;
     }
     return -1;
 };

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
-
 enum OP_CODE {
     ADD = 1,
     MULT = 2,

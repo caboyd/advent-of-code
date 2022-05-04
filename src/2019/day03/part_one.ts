@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import {benchmark, read_input} from '../../lib';
 import {build_lines, day, find_line_intersections, HorizLine, VertLine, year} from './index';
 

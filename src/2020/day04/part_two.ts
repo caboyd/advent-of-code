@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import {benchmark, read_input} from 'src/lib';
 import {day, isPassport, isValidPassport, year} from './index';
 
@@ -12,7 +11,7 @@ export const equation_two = (input: string): number => {
             const [key, value] = s.split(':');
             passport[key] = value;
         });
-        if (isPassport(passport) && isValidPassport(passport)){
+        if (isPassport(passport) && isValidPassport(passport)) {
             count++;
         }
     }
