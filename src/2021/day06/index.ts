@@ -4,8 +4,8 @@ export const year = 2021;
 export const day = 6;
 
 export const results: Results = {
-    one: 0,
-    two: 0,
+    one: 346063,
+    two: 1572358335990,
 };
 
 export const shift_fish = (fish_buckets: number[]): void => {
