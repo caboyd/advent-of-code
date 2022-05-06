@@ -8,15 +8,16 @@
 
 ## 2021
 
-| Day | Part 1                               | Part 2                                |
-| --- | ------------------------------------ | ------------------------------------- |
-| 01  | [0.40ms](src/2021/day01/part_one.ts) | [0.41ms](src/2021/day01/part_two.ts)  |
-| 02  | [0.81ms](src/2021/day02/part_one.ts) | [0.83ms](src/2021/day02/part_two.ts)  |
-| 03  | [3.06ms](src/2021/day03/part_one.ts) | [0.87ms](src/2021/day03/part_two.ts)  |
-| 04  | [8.52ms](src/2021/day04/part_one.ts) | [22.7ms](src/2021/day04/part_two.ts)  |
-| 05  | [38.5ms](src/2021/day05/part_one.ts) | [90.26ms](src/2021/day05/part_two.ts) |
-| 06  | [0.22ms](src/2021/day06/part_one.ts) | [0.25ms](src/2021/day06/part_two.ts)  |
-| 07  | [11.08ms](src/2021/day07/part_one.ts) | [11.42ms](src/2021/day07/part_two.ts)  |
+| Day | Part 1                                | Part 2                                |
+| --- | ------------------------------------- | ------------------------------------- |
+| 01  | [0.40ms](src/2021/day01/part_one.ts)  | [0.41ms](src/2021/day01/part_two.ts)  |
+| 02  | [0.81ms](src/2021/day02/part_one.ts)  | [0.83ms](src/2021/day02/part_two.ts)  |
+| 03  | [3.06ms](src/2021/day03/part_one.ts)  | [0.87ms](src/2021/day03/part_two.ts)  |
+| 04  | [8.52ms](src/2021/day04/part_one.ts)  | [22.7ms](src/2021/day04/part_two.ts)  |
+| 05  | [38.5ms](src/2021/day05/part_one.ts)  | [90.26ms](src/2021/day05/part_two.ts) |
+| 06  | [0.22ms](src/2021/day06/part_one.ts)  | [0.25ms](src/2021/day06/part_two.ts)  |
+| 07  | [11.08ms](src/2021/day07/part_one.ts) | [11.42ms](src/2021/day07/part_two.ts) |
+| 08  | [0.55ms](src/2021/day08/part_one.ts)  | [7.09ms](src/2021/day08/part_two.ts)  |
 
 ## 2020
 
