@@ -1,19 +1,6 @@
 import {benchmark, read_input} from 'src/lib';
 import {day, year} from './index';
 
-const flood_fill = (arr: string[], x: number, y: number): number => {
-    if (arr[y] === undefined) return 0;
-    if (arr[y][x] === '9' || arr[y][x] === undefined) return 0;
-    arr[y] = arr[y].substring(0, x) + '9' + arr[y].substring(x + 1);
-    return (
-        1 +
-        flood_fill(arr, x, y + 1) +
-        flood_fill(arr, x, y - 1) +
-        flood_fill(arr, x - 1, y) +
-        flood_fill(arr, x + 1, y)
-    );
-};
-
 export const equation_two = (input: string): number => {
     const arr = input.split(/\r?\n/).map((x) => x.trim());
     const height = arr.length;
@@ -45,3 +32,16 @@ if (require.main === module) {
         console.log(`Result: ${await benchmark(() => equation_two(input))}`); //964712 ~14.85ms
     })();
 }
+
+const flood_fill = (arr: string[], x: number, y: number): number => {
+    if (arr[y] === undefined) return 0;
+    if (arr[y][x] === '9' || arr[y][x] === undefined) return 0;
+    arr[y] = arr[y].substring(0, x) + '9' + arr[y].substring(x + 1);
+    return (
+        1 +
+        flood_fill(arr, x, y + 1) +
+        flood_fill(arr, x, y - 1) +
+        flood_fill(arr, x - 1, y) +
+        flood_fill(arr, x + 1, y)
+    );
+};
