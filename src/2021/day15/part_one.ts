@@ -15,6 +15,7 @@ export const equation_one = (input: string): number => {
     cost_so_far.set(pos_to_id(start), 0);
     queue.add(new QueueNode(start, 0));
 
+    //https://www.redblobgames.com/pathfinding/a-star/introduction.html
     while (!queue.isEmpty()) {
         const pos = queue.dequeue()!.pos;
 
