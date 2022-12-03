@@ -13,7 +13,7 @@
 | --- | ------------------------------------- | -------------------------------------- |
 | 01  | [0.66ms](src/2022/day01/part_one.ts)  | [0.63ms](src/2022/day01/part_two.ts)   |
 | 02  | [1.63ms](src/2022/day02/part_one.ts)  | [1.63ms](src/2022/day02/part_two.ts)   |
-| 03  | [0.62ms](src/2022/day03/part_one.ts)  | [0.36ms](src/2022/day03/part_two.ts)   |
+| 03  | [0.46ms](src/2022/day03/part_one.ts)  | [0.36ms](src/2022/day03/part_two.ts)   |
 
 ## 2021
 
