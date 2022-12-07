@@ -38,6 +38,7 @@
 | 13  | [17.5ms](src/2021/day13/part_one.ts)  | [22.06ms](src/2021/day13/part_two.ts)  |
 | 14  | [7.24ms](src/2021/day14/part_one.ts)  | [4.32ms](src/2021/day14/part_two.ts)   |
 | 15  | [47.54ms](src/2021/day15/part_one.ts) | [403.24ms](src/2021/day15/part_two.ts) |
+| 16  | [1.03ms](src/2021/day16/part_one.ts)  | [1.03ms](src/2021/day16/part_two.ts)   |
 
 ## 2020
 
