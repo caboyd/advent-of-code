@@ -1,5 +1,5 @@
-import { benchmark, read_input } from 'src/lib';
-import { day, solveRope, vec2Set, year } from './index';
+import {benchmark, read_input} from 'src/lib';
+import {day, solveRope, vec2Set, year} from './index';
 
 export const equation_one = (input: string): number => {
     const lines = input.split(/\r?\n/);
