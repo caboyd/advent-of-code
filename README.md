@@ -23,6 +23,7 @@
 | 10  | [0.28ms](src/2022/day10/part_one.ts)  | [0.24ms](src/2022/day10/part_two.ts)   |
 | 11  | [0.78ms](src/2022/day11/part_one.ts)  | [55.5ms](src/2022/day11/part_two.ts)   |
 | 12  | [3.65ms](src/2022/day12/part_one.ts)  | [11.7ms](src/2022/day12/part_two.ts)   |
+| 13  | [1.02ms](src/2022/day13/part_one.ts)  | [3.43ms](src/2022/day13/part_two.ts)   |
 
 
 ## 2021
