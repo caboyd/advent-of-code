@@ -4,16 +4,11 @@ import {compare, day, year} from './index';
 export const equation_two = (input: string): number => {
     let lines = input.split(/\r?\n/);
 
-    let index = 0;
-    let total = 0;
-
     lines.push(`[[2]]`, `[[6]]`);
     lines = lines.filter((l) => l.length > 0);
     let arr = lines.map((l) => JSON.parse(l));
 
-    arr.sort((a, b) => {
-        return compare(a, b);
-    });
+    arr.sort((a, b) => compare(a, b));
 
     let result = 1;
 

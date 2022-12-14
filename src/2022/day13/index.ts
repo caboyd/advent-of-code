@@ -4,8 +4,8 @@ export const year = 2022;
 export const day = 13;
 
 export const results: Results = {
-    one: 0,
-    two: 0,
+    one: 4894,
+    two: 24180,
 };
 
 export function compare(a: number[] | number[][] | number, b: number[] | number[][] | number): -1 | 0 | 1 {
