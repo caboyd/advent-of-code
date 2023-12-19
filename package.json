@@ -12,7 +12,8 @@
         "url": "https://github.com/caboyd/advent-of-code/"
     },
     "scripts": {
-        "test": "jest"
+        "test-all": "jest",
+        "test-2023": "jest ./src/2023"
     },
     "license": "MIT",
     "devDependencies": {
