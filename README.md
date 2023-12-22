@@ -15,6 +15,7 @@
 | 01  | [3.83ms](src/2023/day01/part_one.ts)  | [6.32ms](src/2023/day01/part_two.ts)   |
 | 02  | [1.14ms](src/2023/day02/part_one.ts)  | [1.33ms](src/2023/day02/part_two.ts)   |
 | 03  | [5.92ms](src/2023/day03/part_one.ts)  | [6.54ms](src/2023/day03/part_two.ts)   |
+| 04  | [1.87ms](src/2023/day04/part_one.ts)  | [1.91ms](src/2023/day04/part_two.ts)   |
 
 ## 2022
 
