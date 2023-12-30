@@ -17,6 +17,8 @@
 | 03  | [5.92ms](src/2023/day03/part_one.ts)  | [6.54ms](src/2023/day03/part_two.ts)   |
 | 04  | [1.87ms](src/2023/day04/part_one.ts)  | [1.91ms](src/2023/day04/part_two.ts)   |
 | 05  | [0.95ms](src/2023/day05/part_one.ts)  | [2388ms](src/2023/day05/part_two.ts)   |
+| 06  | [0.39ms](src/2023/day06/part_one.ts)  | [17.5ms](src/2023/day06/part_two.ts)   |
+| 07  | [13.0ms](src/2023/day07/part_one.ts)  | [12.7ms](src/2023/day07/part_two.ts)   |
 
 ## 2022
 
