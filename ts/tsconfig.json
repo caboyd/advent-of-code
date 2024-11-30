@@ -7,7 +7,7 @@
         "resolveJsonModule": true,
         "sourceMap": true,
         "declaration": false,
-        "baseUrl": "./",
+        "baseUrl": ".",
         "paths": {},
         "outDir": "dist",
         "strict": true,
