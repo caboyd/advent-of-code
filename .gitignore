@@ -105,3 +105,4 @@ dist
 
 .idea
 ts/src/fun
+zig/**/out

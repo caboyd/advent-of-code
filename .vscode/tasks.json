@@ -1,0 +1,33 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "zig build-exe -Doptimize=Debug ${file} -femit-bin=${fileDirname}/out/${fileBasenameNoExtension}.exe",
+            "problemMatcher": ["$zig"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": ["Make Zig Out Folder"]
+        },
+        {
+            "label": "Make Zig Out Folder",
+            "type": "shell",
+            "command": "New-Item -ItemType Directory -Force -Path ${fileDirname}/out"
+        },
+        {
+            "label": "build tests",
+            "type": "shell",
+            "command": "zig test -ODebug --test-no-exec -femit-bin=zig-out/bin/${workspaceFolderBasename}-test ${workspaceFolder}/src/test.zig",
+            "problemMatcher": ["$zig"]
+        },
+        {
+            "label": "zigfmt_and_test_file",
+            "type": "shell",
+            "command": "zig fmt ${file} && zig build test -freference-trace=12 && zig build -freference-trace=12",
+            "problemMatcher": ["$zig"]
+        }
+    ]
+}
