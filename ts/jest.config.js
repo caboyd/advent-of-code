@@ -7,4 +7,7 @@ module.exports = {
     moduleNameMapper: {
         'src/(.*)': '<rootDir>/src/$1',
     },
+    testPathIgnorePatterns: [
+        "/src/_template/" 
+    ],
 };

@@ -7,6 +7,14 @@
 [![2021 Progress](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/caboyd/advent-of-code/master/.badges/2021.json)](src/2021)
 [![2022 Progress](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/caboyd/advent-of-code/master/.badges/2022.json)](src/2022)
 [![2023 Progress](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/caboyd/advent-of-code/master/.badges/2023.json)](src/2023)
+[![2025 Progress](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/caboyd/advent-of-code/master/.badges/2025.json)](src/2025)
+
+## 2025
+
+| Day | Part 1                                | Part 2                                 |
+| --- | ------------------------------------- | -------------------------------------- |
+| 01  | [1.35ms](src/2025/day01/part_one.ts)  | [1.45ms](src/2025/day01/part_two.ts)   |
+
 
 ## 2023
 
