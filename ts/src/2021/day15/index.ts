@@ -14,8 +14,8 @@ export class QueueNode {
 }
 
 export function compare(a: QueueNode, b: QueueNode): number {
-    if (a.priority < b.priority) return 1;
-    if (a.priority > b.priority) return -1;
+    if (a.priority < b.priority) return -1;
+    if (a.priority > b.priority) return 1;
     return 0;
 }
 

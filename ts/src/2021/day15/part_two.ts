@@ -1,9 +1,9 @@
 import {benchmark, read_input} from 'src/lib';
 import {compare, day, get_neighbours, pos_to_id, QueueNode, vec2, year} from './index';
-import {PriorityQueue} from 'typescript-collections';
+import {PriorityQueue} from 'src/lib/PriorityQueue';
 
 export const equation_two = (input: string): number => {
-    const queue = new PriorityQueue<QueueNode>(compare);
+    const queue = new PriorityQueue<QueueNode>(100,compare);
     const start: vec2 = [0, 0];
 
     const map = input.split(/\r?\n/).map((x) => x.split('').map(Number));
@@ -40,8 +40,8 @@ export const equation_two = (input: string): number => {
     cost_so_far.set(pos_to_id(start), 0);
     queue.add(new QueueNode(start, 0));
 
-    while (!queue.isEmpty()) {
-        const pos = queue.dequeue()!.pos;
+    while (!queue.empty()) {
+        const pos = queue.poll()!.pos;
 
         if (pos[0] == end[0] && pos[1] == end[1]) break;
 
